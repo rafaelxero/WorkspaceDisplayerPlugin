@@ -1,11 +1,13 @@
+#pragma once
+
 #include <Eigen/Core>
 
 using namespace Eigen;
 
-class Implicit
-{
+class Implicit {
+
  public:
 
-  virtual double f_value(Vector3f p);
-  virtual Vector3f f_ngrad(Vector3f p);
+  virtual double f_value(Vector3d p) = 0;
+  virtual Vector3d f_ngrad(Vector3d p) = 0;
 };

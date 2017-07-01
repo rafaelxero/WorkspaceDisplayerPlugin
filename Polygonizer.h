@@ -12,26 +12,25 @@
 
 using namespace Eigen;
 
-class Polygon
-{
+class Polygon {
+
  public:
 
-  Polygon(Vector3f p0, Vector3f p1, Vector3f p2, Vector3f n0, Vector3f n1, Vector3f n2);
+  Polygon(Vector3d p0, Vector3d p1, Vector3d p2, Vector3d n0, Vector3d n1, Vector3d n2);
 
-  std::vector<Vector3f> p, n;
+  std::vector<Vector3d> p, n;
 };
 
-struct VertexPol
-{
-  Vector3f p, n;
+struct VertexPol {
+
+  Vector3d p, n;
   double fval;
 };
 
-class Polygonizer
-{
+class Polygonizer {
  public:
   
-  Polygonizer();
+  Polygonizer(Implicit *f);
 
   std::list<Polygon> getPolygons() { return polygons; }
   
@@ -44,16 +43,15 @@ class Polygonizer
   void tri(VertexPol v0, VertexPol v1, VertexPol v2, VertexPol v3);
   void quad(VertexPol v0, VertexPol v1, VertexPol v2, VertexPol v3);
   
-  Vector3f intersect(VertexPol v0, VertexPol v1);
+  Vector3d intersect(VertexPol v0, VertexPol v1);
+  Vector3d project(double s, Vector3d p, double v0, int k);
   
-  void output_tri(Vector3f p0, Vector3f p1, Vector3f p2, Vector3f n0, Vector3f n1, Vector3f n2);
-  void adapt_tri(Vector3f p0, Vector3f p1, Vector3f p2, Vector3f n0, Vector3f n1, Vector3f n2, int k);
+  void adapt_tri(Vector3d p0, Vector3d p1, Vector3d p2, Vector3d n0, Vector3d n1, Vector3d n2, int k);
+  void output_tri(Vector3d p0, Vector3d p1, Vector3d p2, Vector3d n0, Vector3d n1, Vector3d n2);
   
-  bool edge_code(Vector3f n0, Vector3f n1);
-  
-  Vector3f midpoint(bool e, Vector3f p0, Vector3f p1);
-  Vector3f project(double s, Vector3f p, double v0, int k);
-  
+  Vector3d midpoint(bool e, Vector3d p0, Vector3d p1);
+  bool edge_code(Vector3d n0, Vector3d n1);
+
   int sign(double v);
   
  private:
@@ -64,11 +62,11 @@ class Polygonizer
   static const double EPS_DIST = 0.00001;
   static const double DOT_TOL = 0.5;
   
-  Vector3f ll;
-  Vector3f ur;
+  Vector3d ll;
+  Vector3d ur;
   double nx, ny, nz;
   
   std::list<Polygon> polygons;
 
-  //Implicit function;
+  Implicit *func;
 };
